@@ -155,9 +155,9 @@ public class ChooseAreaActivity extends Activity {
 		if (!TextUtils.isEmpty(code)){
 			address = "http://www.weather.com.cn/data/list3/city" + code + ".xml";
 		} else {
-			address = "http://www.weather.com.cn/data/list3?city.xml";
+			address = "http://www.weather.com.cn/data/list3/city.xml";
 		}
-		//showProgressDialog();
+		showProgressDialog();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener(){
 			@Override
 			public void onFinish(String response){
@@ -165,11 +165,13 @@ public class ChooseAreaActivity extends Activity {
 				boolean result = false;
 				if ("province".equals(type)){
 					result = Utility.handleProvincesResponse(coolWeatherDB, response);
+					
 				} else if ("city".equals(type)){
 					result = Utility.handleCitiesResponse(coolWeatherDB, response, selectedProvince.getId());
 				} else if ("county".equals(type)){
 					result = Utility.handleCountiesResponse(coolWeatherDB, response, selectedCity.getId());
 				}
+				
 				if (result){
 					//通过runOnUiThread()方法回到主线程处理逻辑
 					runOnUiThread(new Runnable(){
@@ -187,7 +189,7 @@ public class ChooseAreaActivity extends Activity {
 					});
 				}
 			}
-			
+			//Toast.makeText(ChooseAreaActivity.this, "--",Toast.LENGTH_SHORT).show();
 			@Override
 			public void onError(Exception e){
 				//通过runOnUiThread()方法回到主线程处理逻辑
